@@ -1,0 +1,22 @@
+{
+  "name": "sliceify",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.1.2"
+  },
+  "dependencies": {
+    "diagram-js": "^15.3.0",
+    "diagram-js-grid": "^1.1.0",
+    "inherits-browser": "^0.1.0",
+    "min-dash": "^4.2.3",
+    "min-dom": "^5.1.1",
+    "tiny-svg": "^4.1.3"
+  }
+}
