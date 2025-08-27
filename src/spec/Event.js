@@ -1,4 +1,5 @@
 import Element from './Element';
+import ColorUtil from '../utils/ColorUtil';
 
 export default class Event extends Element {
   constructor() {
@@ -13,6 +14,6 @@ Event.prototype.DEFAULT_SIZE = {
   width: 100,
   height: 80,
 };
-Event.prototype.DEFAULT_COLOR = '#FF9D48';
+Event.prototype.DEFAULT_COLOR = ColorUtil.ORANGE;
 
 Event.prototype.type = 'Event';
