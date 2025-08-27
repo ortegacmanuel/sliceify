@@ -15,6 +15,7 @@ const BLACK = 'hsl(225, 10%, 15%)';
 const TASK_BORDER_RADIUS = 10;
 const DEFAULT_FILL_OPACITY = 0.95;
 const DEFAULT_TEXT_SIZE = 16;
+const DEFAULT_FONT_WEIGHT = 'normal';
 
 // helper functions //////////////////////
 
@@ -28,7 +29,7 @@ function colorEscape(str) {
 }
 
 function getStrokeColor(element, defaultColor) {
-  return defaultColor;
+  return getColor(element);
 }
 
 function getFillColor(element, defaultColor) {
@@ -115,17 +116,28 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
     return text;
   }
 
-  function renderEmbeddedLabel(parentGfx, element, align, fontSize) {
+  function renderEmbeddedLabel(parentGfx, element, options) {
     var semantic = getSemantic(element);
+
+    options = options || {};
+
+    const {
+      align = 'center-middle',
+      padding = 5,
+      fontSize = DEFAULT_TEXT_SIZE,
+      fontWeight = DEFAULT_FONT_WEIGHT,
+      style = {}
+    } = options;
 
     return renderLabel(parentGfx, semantic.name, {
       box: element,
       align: align,
-      padding: 5,
-      style: {
+      padding: padding,
+      style: assign({
         fill: getColor(element) === 'black' ? 'white' : 'black',
-        fontSize: fontSize || DEFAULT_TEXT_SIZE
-      },
+        fontSize: fontSize,
+        fontWeight: fontWeight
+      }, style)
     });
   }  
 
@@ -148,7 +160,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
       var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
 
-      renderEmbeddedLabel(parentGfx, element, 'center-middle');
+      renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
 
       return rect;
     },
@@ -185,7 +197,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 function getColor(element) {
   var bo = getSemantic(element);
 
-  return bo.color || element.color;
+  return element.color || bo.color;
 }
 
 inherits(Renderer, BaseRenderer);

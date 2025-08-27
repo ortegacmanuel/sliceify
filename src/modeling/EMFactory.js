@@ -29,11 +29,3 @@ EMFactory.prototype.getDefaultColor = function (semantic) {
 
   return 'black';
 };
-
-EMFactory.prototype.getDefaultName = function (semantic) {
-  if (semantic.DEFAULT_NAME) {
-    return semantic.DEFAULT_NAME;
-  }
-
-  return 'Event';
-};

@@ -1,10 +1,9 @@
-import BaseSpec from './BaseSpec';
+import Element from './Element';
 
-export default class Event extends BaseSpec {
+export default class Event extends Element {
   constructor() {
     super();
-    this.Type = 'Event';
-    this.Source = 'internal';
+    this.source = 'internal';
   }
 }
 
@@ -14,9 +13,6 @@ Event.prototype.DEFAULT_SIZE = {
   width: 100,
   height: 80,
 };
-
 Event.prototype.DEFAULT_COLOR = '#FF9D48';
 
-Event.prototype.Type = 'Event';
-
-Event.prototype.DEFAULT_NAME = 'Event';
+Event.prototype.type = 'Event';

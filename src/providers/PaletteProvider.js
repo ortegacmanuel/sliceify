@@ -63,7 +63,7 @@ MyPaletteProvider.prototype.getPaletteEntries = function () {
     },
   };
   SPEC_LIST.forEach((Spec) => {
-    const type = Spec.prototype.Type;
+    const type = Spec.prototype.type;
     entries[`create-${type}`] = createAction(
       type,
       'state',

@@ -1,4 +1,4 @@
 export default function BaseSpec() {
 }
 
-BaseSpec.prototype.Type = 'Base';
+BaseSpec.prototype.type = 'Base';
