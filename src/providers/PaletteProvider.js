@@ -16,13 +16,7 @@ export default function MyPaletteProvider(create, elementFactory, lassoTool, pal
   palette.registerProvider(this);
 }
 
-MyPaletteProvider.$inject = [
-  'create',
-  'elementFactory',
-  'lassoTool',
-  'palette'
-];
-
+MyPaletteProvider.$inject = ['create', 'elementFactory', 'lassoTool', 'palette'];
 
 MyPaletteProvider.prototype.getPaletteEntries = function () {
   const create = this.create || this._create;

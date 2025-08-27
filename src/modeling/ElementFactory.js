@@ -36,7 +36,9 @@ ElementFactory.prototype.create = function (elementType, attrs) {
 
   const size = EMFactory.getDefaultSize(businessObject);
   const defaultColor = EMFactory.getDefaultColor(businessObject);
-  if (attrs.color == null){ attrs.color = defaultColor; }
+  if (attrs.color == null) {
+    attrs.color = defaultColor;
+  }
 
   attrs = assign({ businessObject }, size, attrs);
 

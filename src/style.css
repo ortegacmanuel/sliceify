@@ -1,10 +1,9 @@
-
 html,
 body,
 #canvas,
 #canvas > div {
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
 }
 
 .palette-icon-lasso-tool {

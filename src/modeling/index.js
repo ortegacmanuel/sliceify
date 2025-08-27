@@ -9,10 +9,7 @@ import EMFactory from './EMFactory';
 import DiagramModelingModule from 'diagram-js/lib/features/modeling';
 
 export default {
-  __init__: [
-    'modeling',
-    'EMFactory',
-  ],
+  __init__: ['modeling', 'EMFactory'],
   __depends__: [
     DiagramCommand,
     DiagramChangeSupport,

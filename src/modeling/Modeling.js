@@ -4,8 +4,7 @@ import { keys } from 'min-dash';
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 import { getProperties, setProperties } from '../utils';
 
-function UpdatePropertiesHandler() {
-}
+function UpdatePropertiesHandler() {}
 
 /**
  * @param {Object} context
@@ -53,12 +52,7 @@ UpdatePropertiesHandler.prototype.revert = function (context) {
   return context.changed;
 };
 
-export default function Modeling(
-  canvas,
-  commandStack,
-  rules,
-  injector,
-) {
+export default function Modeling(canvas, commandStack, rules, injector) {
   this.canvas = canvas;
   this.commandStack = commandStack;
   this.rules = rules;
@@ -68,12 +62,7 @@ export default function Modeling(
 
 inherits(Modeling, BaseModeling);
 
-Modeling.$inject = [
-  'canvas',
-  'commandStack',
-  'rules',
-  'injector',
-];
+Modeling.$inject = ['canvas', 'commandStack', 'rules', 'injector'];
 
 Modeling.prototype.connect = function (source, target, attrs, hints) {
   const { rules } = this;

@@ -1,6 +1,5 @@
 import inherits from 'inherits-browser';
-import { domify, query } from 'min-dom';
-import { innerSVG } from 'tiny-svg';
+import { domify } from 'min-dom';
 import Diagram from 'diagram-js';
 
 import AlignElementsModule from 'diagram-js/lib/features/align-elements';
@@ -91,27 +90,19 @@ Editor.prototype.modules = [
  */
 Editor.prototype.createContainer = function () {
   return domify(
-    '<div class="event-modeling-designer-container" style="width: 100%; height: 100%"></div>',
+    '<div class="event-modeling-designer-container" style="width: 100%; height: 100%"></div>'
   );
 };
-
 
 /**
  * Initialize the editor
  */
 Editor.prototype.init = function (container, options) {
-  const {
-    additionalModules,
-    canvas,
-    ...additionalOptions
-  } = options;
+  const { additionalModules, canvas, ...additionalOptions } = options;
 
   const baseModules = options.modules || this.modules;
 
-  const modules = [
-    ...baseModules,
-    ...(additionalModules || []),
-  ];
+  const modules = [...baseModules, ...(additionalModules || [])];
 
   const diagramOptions = {
     ...additionalOptions,
@@ -173,4 +164,3 @@ Editor.prototype.attachTo = function (parentNode) {
 
   this.get('canvas').resized();
 };
-  

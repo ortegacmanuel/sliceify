@@ -1,18 +1,17 @@
 import inherits from 'inherits-browser';
 
-import { assign, forEach, isObject } from 'min-dash';
+import { assign, isObject } from 'min-dash';
 
-import { attr as domAttr, query as domQuery } from 'min-dom';
-
-import { append as svgAppend, attr as svgAttr, create as svgCreate, classes as svgClasses } from 'tiny-svg';
+import {
+  append as svgAppend,
+  attr as svgAttr,
+  create as svgCreate,
+  classes as svgClasses,
+} from 'tiny-svg';
 
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
-import { createLine } from 'diagram-js/lib/util/RenderUtil';
-import { translate } from 'diagram-js/lib/util/SvgTransformUtil';
-
 const BLACK = 'hsl(225, 10%, 15%)';
-const TASK_BORDER_RADIUS = 10;
 const DEFAULT_FILL_OPACITY = 0.95;
 const DEFAULT_TEXT_SIZE = 16;
 const DEFAULT_FONT_WEIGHT = 'normal';
@@ -23,36 +22,23 @@ function getSemantic(element) {
   return element.businessObject;
 }
 
-function colorEscape(str) {
-  // only allow characters and numbers
-  return str.replace(/[^0-9a-zA-z]+/g, '_');
-}
-
 function getStrokeColor(element, defaultColor) {
-  return getColor(element);
+  return getColor(element) || defaultColor;
 }
 
 function getFillColor(element, defaultColor) {
-  return getColor(element);
+  return getColor(element) || defaultColor;
 }
 
-function getLabelColor(element, defaultColor, defaultStrokeColor) {
-  return defaultColor || getStrokeColor(element, defaultStrokeColor);
-}
-
-export default function Renderer(config, eventBus, pathMap, styles, textRenderer, canvas) {
+export default function Renderer(config, eventBus, styles, textRenderer) {
   BaseRenderer.call(this, eventBus);
 
   const { computeStyle } = styles;
 
-  const markers = {};
-
   const defaultFillColor = (config && config.defaultFillColor) || 'white';
   const defaultStrokeColor = (config && config.defaultStrokeColor) || BLACK;
-  const defaultLabelColor = (config && config.defaultLabelColor);
 
   function drawRect(parentGfx, width, height, r, offset, attrs) {
-
     if (isObject(offset)) {
       attrs = offset;
       offset = 0;
@@ -63,7 +49,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
     attrs = computeStyle(attrs, {
       stroke: 'black',
       strokeWidth: 2,
-      fill: 'white'
+      fill: 'white',
     });
 
     var rect = svgCreate('rect');
@@ -73,7 +59,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
       width: width - offset * 2,
       height: height - offset * 2,
       rx: r,
-      ry: r
+      ry: r,
     });
     svgAttr(rect, attrs);
 
@@ -82,30 +68,15 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
     return rect;
   }
 
-  function drawPath(parentGfx, d, attrs) {
-
-    attrs = computeStyle(attrs, [ 'no-fill' ], {
-      strokeWidth: 2,
-      stroke: 'black'
-    });
-
-    var path = svgCreate('path');
-    svgAttr(path, { d: d });
-    svgAttr(path, attrs);
-
-    svgAppend(parentGfx, path);
-
-    return path;
-  }
-
-
   function renderLabel(parentGfx, label, options) {
-
-    options = assign({
-      size: {
-        width: 100
-      }
-    }, options);
+    options = assign(
+      {
+        size: {
+          width: 100,
+        },
+      },
+      options
+    );
 
     var text = textRenderer.createText(label || '', options);
 
@@ -126,20 +97,23 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
       padding = 5,
       fontSize = DEFAULT_TEXT_SIZE,
       fontWeight = DEFAULT_FONT_WEIGHT,
-      style = {}
+      style = {},
     } = options;
 
     return renderLabel(parentGfx, semantic.name, {
       box: element,
       align: align,
       padding: padding,
-      style: assign({
-        fill: getColor(element) === 'black' ? 'white' : 'black',
-        fontSize: fontSize,
-        fontWeight: fontWeight
-      }, style)
+      style: assign(
+        {
+          fill: getColor(element) === 'black' ? 'white' : 'black',
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+        },
+        style
+      ),
     });
-  }  
+  }
 
   let handlers;
 
@@ -151,7 +125,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
     Event(parentGfx, element) {
       var attrs = {
         fill: getFillColor(element, defaultFillColor),
-        stroke: getStrokeColor(element, defaultStrokeColor)
+        stroke: getStrokeColor(element, defaultStrokeColor),
       };
 
       if (!('fillOpacity' in attrs)) {
@@ -167,7 +141,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
   };
 
   function drawShape(parent, element) {
-    const h = handlers[element.type];
+    const h = renderer(element.type);
 
     if (!h) {
       return BaseRenderer.prototype.drawShape.apply(this, [parent, element]);
@@ -202,11 +176,4 @@ function getColor(element) {
 
 inherits(Renderer, BaseRenderer);
 
-Renderer.$inject = [
-  'config.Renderer',
-  'eventBus',
-  'pathMap',
-  'styles',
-  'textRenderer',
-  'canvas',
-];
+Renderer.$inject = ['config.Renderer', 'eventBus', 'pathMap', 'styles', 'textRenderer', 'canvas'];

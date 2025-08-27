@@ -7,7 +7,7 @@ export default class Element extends BaseSpec {
     this.fields = [];
     this.description = '';
     this.metadata = {
-      version: 1
+      version: 1,
     };
   }
 }
