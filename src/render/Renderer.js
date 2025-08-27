@@ -30,7 +30,7 @@ function getFillColor(element, defaultColor) {
   return getColor(element) || defaultColor;
 }
 
-export default function Renderer(config, eventBus, styles, textRenderer) {
+export default function Renderer(config, eventBus, pathMap, styles, textRenderer) {
   BaseRenderer.call(this, eventBus);
 
   const { computeStyle } = styles;
