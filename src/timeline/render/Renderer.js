@@ -37,8 +37,38 @@ export default class TimelineRenderer extends BaseRenderer {
     if (element.type === 'Timeline') {
       const g = svgCreate('g');
       const color = element.color || bo.color || '#eef3f7';
+
+      // header strip background
       drawRect(g, element.width, element.height, 4, { fill: color, 'fill-opacity': 0.6, stroke: '#334155', 'stroke-opacity': 0.4 });
+
+      // numbered 240px blocks aligned to origin, like sandbox
+      const unitPx = 240;
+      const origin = (bo.scale && bo.scale.origin) || 0;
+      const firstIndex = Math.ceil((0 - origin) / unitPx);
+      const lastIndex = Math.floor((element.width - origin - 1) / unitPx);
+      for (let u = firstIndex; u <= lastIndex; u++) {
+        const x = origin + u * unitPx;
+        const blockStart = Math.max(0, x);
+        const blockEnd = Math.min(element.width, x + unitPx);
+        const width = Math.max(0, blockEnd - blockStart);
+        if (!width) continue;
+
+        const block = svgCreate('rect');
+        // make blocks semi-transparent so they don't hide content
+        svgAttr(block, { x: blockStart, y: 0, width, height: element.height, fill: '#64748b', 'fill-opacity': 0.12, stroke: '#64748b', 'stroke-opacity': 0.25, class: 'timeline-block' });
+        svgAppend(g, block);
+
+        if (u > 0) {
+          const txt = svgCreate('text');
+          svgAttr(txt, { x: blockStart + 4, y: 14, class: 'timeline-tick-label', 'text-anchor': 'start' });
+          txt.textContent = `${u}`;
+          svgAppend(g, txt);
+        }
+      }
+
+      // draw title last so it stays visible above blocks
       drawName(g, bo.name || 'Timeline', 6, 16);
+
       svgAppend(parentGfx, g);
       return g;
     }
