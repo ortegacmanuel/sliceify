@@ -1,8 +1,18 @@
 import { assign } from 'min-dash';
 
 import Event from '../spec/Event';
+import Timeline from '../spec/Timeline';
+import Lane from '../spec/Lane';
+import Slice from '../spec/Slice';
+import SlicePanel from '../spec/SlicePanel';
 
-const SPEC_LIST = [Event];
+const SPEC_LIST = [
+  Event,
+  Timeline,
+  Lane,
+  Slice,
+  SlicePanel
+];
 
 /**
  * A example palette provider.

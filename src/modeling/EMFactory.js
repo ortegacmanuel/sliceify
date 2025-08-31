@@ -1,10 +1,18 @@
 import Event from '../spec/Event';
 import EventModel from '../spec/EventModel';
+import Timeline from '../spec/Timeline';
+import Lane from '../spec/Lane';
+import Slice from '../spec/Slice';
+import SlicePanel from '../spec/SlicePanel';
 
 export default function EMFactory() {
   const typeToSpec = new Map();
   typeToSpec.set('Event', Event);
   typeToSpec.set('EventModel', EventModel);
+  typeToSpec.set('Timeline', Timeline);
+  typeToSpec.set('Lane', Lane);
+  typeToSpec.set('Slice', Slice);
+  typeToSpec.set('SlicePanel', SlicePanel);
   this.typeToSpec = typeToSpec;
 }
 

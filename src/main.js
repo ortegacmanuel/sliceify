@@ -11,7 +11,7 @@ const editor = new Editor({
   // Add properties panel as additional modules
   additionalModules: [
     PropertiesPanel,
-    PropertiesProvider,    
+    PropertiesProvider,
   ],
 });
 
@@ -30,3 +30,6 @@ editor.import({
     },
   },
 });
+
+window.editor = editor;
+window.di = (cb) => editor.invoke(cb);

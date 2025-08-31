@@ -161,7 +161,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   // eslint-disable-next-line no-unused-vars
   this.canRender = function (element) {
-    return true;
+    return [ 'Event'].includes(element.type);
   };
 
   this.drawShape = drawShape;

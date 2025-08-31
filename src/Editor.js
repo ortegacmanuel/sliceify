@@ -31,6 +31,7 @@ import GridModule from 'diagram-js-grid';
 import Providers from './providers';
 import Render from './render';
 import Modeling from './modeling';
+import TimelineModule from './timeline';
 
 import 'diagram-js/assets/diagram-js.css';
 import '@bpmn-io/properties-panel/assets/properties-panel.css';
@@ -58,6 +59,7 @@ Editor.prototype.modules = [
   Providers,
   Render,
   Modeling,
+  TimelineModule,
 
   // Built-in modules
   AlignElementsModule,
