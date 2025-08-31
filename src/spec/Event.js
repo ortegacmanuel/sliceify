@@ -11,7 +11,7 @@ export default class Event extends Element {
 Event.prototype.THUMBNAIL_CLASS = 'palette-icon-create-event';
 
 Event.prototype.DEFAULT_SIZE = {
-  width: 100,
+  width: 180,
   height: 80,
 };
 Event.prototype.DEFAULT_COLOR = ColorUtil.ORANGE;

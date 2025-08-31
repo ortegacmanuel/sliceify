@@ -21,6 +21,13 @@ export default function HeaderDragBehavior(eventBus, selection, move) {
     });
     e.cancelBubble = true;
   });
+
+  // After the drag completes, re-select only the timeline so properties panel can edit its name
+  eventBus.on('shape.move.end', 1500, (e) => {
+    const el = e.shape || (e.context && e.context.shape);
+    if (!el || el.type !== 'Timeline') return;
+    selection.select(el);
+  });
 }
 
 HeaderDragBehavior.$inject = [ 'eventBus', 'selection', 'move' ];
