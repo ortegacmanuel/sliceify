@@ -25,3 +25,54 @@ body,
 .context-pad-icon-connect {
   background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%221.5%22%20width%3D%2246%22%20height%3D%2246%22%3E%3Cline%20x1%3D%2215%22%20y1%3D%225%22%20x2%3D%225%22%20y2%3D%2215%22%2F%3E%3C%2Fsvg%3E') !important;
 }
+
+.io-control {
+  background: #FAFAFA;
+  border-radius: 2px;
+  border: solid 1px #E0E0E0;
+  padding: 5px;
+}
+
+.io-control-list {
+  display: inline-block;
+  list-style: none;
+  padding: 5px;
+  margin: 0 10px 0 0;
+}
+
+.io-control-list li {
+  display: inline-block;
+}
+
+.io-control-list li + li {
+  margin-left: 10px;
+}
+
+.io-control-list button {
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 26px;
+  color: #555555;
+  background: none;
+  border: none;
+}
+
+.io-control .vr {
+  height: 15px;
+  border-right: solid 1px #DDD;
+}
+
+/* Show custom palette-style icons inside the properties panel header */
+.bio-properties-panel [class^="palette-icon-"],
+.bio-properties-panel [class*=" palette-icon-"] {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  vertical-align: middle;
+  margin-right: 6px; /* optional spacing before label */
+}

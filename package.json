@@ -18,6 +18,8 @@
     "vite": "^7.1.2"
   },
   "dependencies": {
+    "@bpmn-io/properties-panel": "^3.33.0",
+    "bpmn-font": "^0.12.1",
     "diagram-js": "^15.3.0",
     "diagram-js-grid": "^1.1.0",
     "inherits-browser": "^0.1.0",

@@ -7,6 +7,7 @@ import ElementFactory from './ElementFactory';
 import Modeling from './Modeling';
 import EMFactory from './EMFactory';
 import DiagramModelingModule from 'diagram-js/lib/features/modeling';
+import EMImporter from './EMImporter';
 
 export default {
   __init__: ['modeling', 'EMFactory'],
@@ -18,6 +19,7 @@ export default {
     DiagramModelingModule,
   ],
   elementFactory: ['type', ElementFactory],
+  EMImporter: ['type', EMImporter],
   modeling: ['type', Modeling],
   EMFactory: ['type', EMFactory],
 };

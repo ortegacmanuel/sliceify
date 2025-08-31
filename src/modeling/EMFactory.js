@@ -1,8 +1,10 @@
 import Event from '../spec/Event';
+import EventModel from '../spec/EventModel';
 
 export default function EMFactory() {
   const typeToSpec = new Map();
   typeToSpec.set('Event', Event);
+  typeToSpec.set('EventModel', EventModel);
   this.typeToSpec = typeToSpec;
 }
 

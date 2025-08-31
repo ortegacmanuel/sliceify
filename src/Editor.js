@@ -33,6 +33,8 @@ import Render from './render';
 import Modeling from './modeling';
 
 import 'diagram-js/assets/diagram-js.css';
+import '@bpmn-io/properties-panel/assets/properties-panel.css';
+import 'bpmn-font/dist/css/bpmn-embedded.css';
 import './style.css';
 
 /**
@@ -121,6 +123,14 @@ Editor.prototype.init = function (container, options) {
   }
 
   this.get('eventBus').fire('editor.attached');
+};
+
+/**
+ * Import diagram from JSON definitions.
+ */
+Editor.prototype.import = function (definitions) {
+  this.clear();
+  this.get('EMImporter').import(definitions);
 };
 
 /**
