@@ -138,6 +138,66 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
       return rect;
     },
+    Screen(parentGfx, element) {
+      // geometry
+      var borderRadius = 8;
+      var headerHeight = Math.max(20, Math.min(28, Math.round(element.height * 0.18)));
+
+      // outer window with rounded corners, transparent fill
+      var outerAttrs = {
+        fill: 'none',
+        stroke: getStrokeColor(element, defaultStrokeColor),
+      };
+      var outerRect = drawRect(parentGfx, element.width, element.height, borderRadius, outerAttrs);
+
+      // content body uses spec default color (e.g. white)
+      var body = svgCreate('rect');
+      svgAttr(body, {
+        x: 1,
+        y: headerHeight,
+        width: Math.max(0, element.width - 2),
+        height: Math.max(0, element.height - headerHeight - 2),
+        fill: getFillColor(element, defaultFillColor),
+        stroke: 'none',
+      });
+      svgAppend(parentGfx, body);
+
+      // header bar
+      var header = svgCreate('rect');
+      svgAttr(header, {
+        x: 0,
+        y: 0,
+        width: element.width,
+        height: headerHeight,
+        rx: borderRadius,
+        ry: borderRadius,
+        fill: '#E6E6E6',
+        stroke: 'none',
+      });
+      svgAppend(parentGfx, header);
+
+      // three circles on the left of the header
+      var circleRadius = 4;
+      var circleY = Math.round(headerHeight / 2);
+      var startX = 14;
+      var gap = 12;
+      for (var i = 0; i < 3; i++) {
+        var dot = svgCreate('circle');
+        svgAttr(dot, { cx: startX + i * gap, cy: circleY, r: circleRadius, fill: 'white', stroke: 'none' });
+        svgAppend(parentGfx, dot);
+      }
+
+      // place name above the window, centered
+      var labelBox = { x: 0, y: -headerHeight - 6, width: element.width, height: headerHeight };
+      renderLabel(parentGfx, getSemantic(element).name, {
+        box: labelBox,
+        align: 'center-top',
+        padding: 0,
+        style: assign({ fill: 'black', fontSize: DEFAULT_TEXT_SIZE, fontWeight: 'bold' }, {}),
+      });
+
+      return outerRect;
+    },
   };
 
   function drawShape(parent, element) {
@@ -161,7 +221,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   // eslint-disable-next-line no-unused-vars
   this.canRender = function (element) {
-    return [ 'Event'].includes(element.type);
+    return [ 'Event', 'Screen'].includes(element.type);
   };
 
   this.drawShape = drawShape;

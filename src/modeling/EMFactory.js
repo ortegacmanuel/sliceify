@@ -4,6 +4,7 @@ import Timeline from '../spec/Timeline';
 import Lane from '../spec/Lane';
 import Slice from '../spec/Slice';
 import SlicePanel from '../spec/SlicePanel';
+import Screen from '../spec/Screen';
 
 export default function EMFactory() {
   const typeToSpec = new Map();
@@ -13,6 +14,7 @@ export default function EMFactory() {
   typeToSpec.set('Lane', Lane);
   typeToSpec.set('Slice', Slice);
   typeToSpec.set('SlicePanel', SlicePanel);
+  typeToSpec.set('Screen', Screen);
   this.typeToSpec = typeToSpec;
 }
 

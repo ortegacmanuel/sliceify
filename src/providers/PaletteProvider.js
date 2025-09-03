@@ -5,9 +5,14 @@ import Timeline from '../spec/Timeline';
 import Lane from '../spec/Lane';
 import Slice from '../spec/Slice';
 import SlicePanel from '../spec/SlicePanel';
+import Screen from '../spec/Screen';
 
-const SPEC_LIST = [
+const BASE_SPEC_LIST = [
   Event,
+  Screen
+];
+
+const TIMELINE_SPEC_LIST = [
   Timeline,
   Lane,
   Slice,
@@ -61,16 +66,29 @@ MyPaletteProvider.prototype.getPaletteEntries = function () {
         },
       },
     },
-    'tool-separator': {
-      group: 'tools',
+    'tool-separator-0': {
+      group: 'base',
       separator: true,
     },
   };
-  SPEC_LIST.forEach((Spec) => {
+  BASE_SPEC_LIST.forEach((Spec) => {
     const type = Spec.prototype.type;
     entries[`create-${type}`] = createAction(
       type,
-      'state',
+      'base',
+      Spec.prototype.THUMBNAIL_CLASS,
+      `Create ${type}`
+    );
+  });
+  entries['tool-separator-1'] = {
+    group: 'timeline',
+    separator: true,
+  };
+  TIMELINE_SPEC_LIST.forEach((Spec) => {
+    const type = Spec.prototype.type;
+    entries[`create-${type}`] = createAction(
+      type,
+      'timeline',
       Spec.prototype.THUMBNAIL_CLASS,
       `Create ${type}`
     );
