@@ -6,9 +6,11 @@ import Lane from '../spec/Lane';
 import Slice from '../spec/Slice';
 import SlicePanel from '../spec/SlicePanel';
 import Screen from '../spec/Screen';
+import Command from '../spec/Command';
 
 const BASE_SPEC_LIST = [
   Event,
+  Command,
   Screen
 ];
 

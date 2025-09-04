@@ -198,6 +198,22 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
       return outerRect;
     },
+    Command(parentGfx, element) {
+      var attrs = {
+        fill: getFillColor(element, defaultFillColor),
+        stroke: getStrokeColor(element, defaultStrokeColor),
+      };
+
+      if (!('fillOpacity' in attrs)) {
+        attrs.fillOpacity = DEFAULT_FILL_OPACITY;
+      }
+
+      var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
+
+      renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
+
+      return rect;
+    },
   };
 
   function drawShape(parent, element) {
@@ -221,7 +237,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   // eslint-disable-next-line no-unused-vars
   this.canRender = function (element) {
-    return [ 'Event', 'Screen'].includes(element.type);
+    return [ 'Event', 'Screen', 'Command'].includes(element.type);
   };
 
   this.drawShape = drawShape;
