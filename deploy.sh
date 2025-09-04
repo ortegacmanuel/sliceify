@@ -21,6 +21,22 @@ git checkout "$BRANCH"
 echo "Pulling latest changes"
 git pull
 
+echo "Ensuring Node.js version 20.19.0 via nvm (if available)"
+# Load nvm if present
+if [ -z "${NVM_DIR:-}" ]; then
+  if [ -d "$HOME/.nvm" ]; then
+    export NVM_DIR="$HOME/.nvm"
+  fi
+fi
+if [ -n "${NVM_DIR:-}" ] && [ -s "$NVM_DIR/nvm.sh" ]; then
+  # shellcheck source=/dev/null
+  . "$NVM_DIR/nvm.sh"
+  nvm install 20.19.0 >/dev/null
+  nvm use 20.19.0
+else
+  echo "nvm not found; skipping Node version switch. Make sure Node >= 20.19 is active."
+fi
+
 echo "Installing dependencies"
 npm ci
 
