@@ -7,11 +7,15 @@ import Slice from '../spec/Slice';
 import SlicePanel from '../spec/SlicePanel';
 import Screen from '../spec/Screen';
 import Command from '../spec/Command';
+import ReadModel from '../spec/ReadModel';
+import Processor from '../spec/Processor';
 
 const BASE_SPEC_LIST = [
   Event,
   Command,
-  Screen
+  ReadModel,
+  Screen,
+  Processor
 ];
 
 const TIMELINE_SPEC_LIST = [

@@ -6,6 +6,8 @@ import Slice from '../spec/Slice';
 import SlicePanel from '../spec/SlicePanel';
 import Screen from '../spec/Screen';
 import Command from '../spec/Command';
+import ReadModel from '../spec/ReadModel';
+import Processor from '../spec/Processor';
 
 export default function EMFactory() {
   const typeToSpec = new Map();
@@ -17,6 +19,8 @@ export default function EMFactory() {
   typeToSpec.set('SlicePanel', SlicePanel);
   typeToSpec.set('Screen', Screen);
   typeToSpec.set('Command', Command);
+  typeToSpec.set('ReadModel', ReadModel);
+  typeToSpec.set('Processor', Processor);
   this.typeToSpec = typeToSpec;
 }
 

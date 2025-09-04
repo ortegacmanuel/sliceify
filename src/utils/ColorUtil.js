@@ -7,4 +7,5 @@ export default {
   YELLOW: '#F5D128',
   BLACK: 'black',
   WHITE: 'white',
+  GRAY: '#808080',
 };

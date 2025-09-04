@@ -214,6 +214,81 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
       return rect;
     },
+    ReadModel(parentGfx, element) {
+      var attrs = {
+        fill: getFillColor(element, defaultFillColor),
+        stroke: getStrokeColor(element, defaultStrokeColor),
+      };
+
+      if (!('fillOpacity' in attrs)) {
+        attrs.fillOpacity = DEFAULT_FILL_OPACITY;
+      }
+
+      var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
+
+      renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
+
+      return rect;
+    },
+    Processor(parentGfx, element) {
+      // draw a cog gear with transparent background
+      var labelOffset = DEFAULT_TEXT_SIZE + 8;
+      var cx = element.width / 2;
+      var contentHalf = Math.max(10, (element.height - labelOffset) / 2);
+      var cy = labelOffset + contentHalf;
+      var margin = 8;
+      var outerRadius = Math.max(8, Math.min(cx, contentHalf) - margin);
+      var innerRadius = Math.max(4, Math.round(outerRadius * 0.52));
+      var toothCount = 10;
+      var toothHeight = Math.max(5, Math.round(outerRadius * 0.28));
+      var toothWidth = Math.max(6, Math.round(outerRadius * 0.30));
+
+      var color = getFillColor(element, defaultFillColor);
+
+      // gear ring with punched-out center (evenodd)
+      function circlePath(cx, cy, r) {
+        return 'M ' + (cx - r) + ' ' + cy +
+               ' a ' + r + ' ' + r + ' 0 1 0 ' + (r * 2) + ' 0' +
+               ' a ' + r + ' ' + r + ' 0 1 0 ' + (-r * 2) + ' 0';
+      }
+
+      var ringPath = svgCreate('path');
+      var d = circlePath(cx, cy, outerRadius) + ' ' + circlePath(cx, cy, innerRadius);
+      svgAttr(ringPath, { d: d, fill: color, 'fill-rule': 'evenodd', stroke: 'none' });
+      svgAppend(parentGfx, ringPath);
+
+      // teeth
+      for (var i = 0; i < toothCount; i++) {
+        var angle = (360 / toothCount) * i;
+        var tooth = svgCreate('rect');
+        var x = cx - toothWidth / 2;
+        var y = cy - outerRadius - Math.round(toothHeight * 0.45);
+        svgAttr(tooth, {
+          x: x,
+          y: y,
+          width: toothWidth,
+          height: toothHeight,
+          fill: color,
+          stroke: 'none',
+          transform: 'rotate(' + angle + ' ' + cx + ' ' + cy + ')',
+          rx: 2,
+          ry: 2,
+        });
+        svgAppend(parentGfx, tooth);
+      }
+
+      // place name above the gear, centered, with dynamic offset to avoid overlap
+      var labelHeight = labelOffset;
+      var labelBox = { x: 0, y: 0, width: element.width, height: labelHeight };
+      renderLabel(parentGfx, getSemantic(element).name, {
+        box: labelBox,
+        align: 'center-top',
+        padding: 0,
+        style: assign({ fill: 'black', fontSize: DEFAULT_TEXT_SIZE, fontWeight: 'bold' }, {}),
+      });
+
+      return ringPath;
+    },       
   };
 
   function drawShape(parent, element) {
@@ -237,7 +312,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   // eslint-disable-next-line no-unused-vars
   this.canRender = function (element) {
-    return [ 'Event', 'Screen', 'Command'].includes(element.type);
+    return [ 'Event', 'Screen', 'Command', 'ReadModel', 'Processor'].includes(element.type);
   };
 
   this.drawShape = drawShape;
