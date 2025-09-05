@@ -6,11 +6,12 @@ import DiagramSelection from 'diagram-js/lib/features/selection';
 import ElementFactory from './ElementFactory';
 import Modeling from './Modeling';
 import EMFactory from './EMFactory';
+import EMRules from './EMRules';
 import DiagramModelingModule from 'diagram-js/lib/features/modeling';
 import EMImporter from './EMImporter';
 
 export default {
-  __init__: ['modeling', 'EMFactory'],
+  __init__: ['modeling', 'EMFactory', 'EMRules'],
   __depends__: [
     DiagramCommand,
     DiagramChangeSupport,
@@ -22,4 +23,5 @@ export default {
   EMImporter: ['type', EMImporter],
   modeling: ['type', Modeling],
   EMFactory: ['type', EMFactory],
+  EMRules: ['type', EMRules],
 };

@@ -2,6 +2,8 @@ import inherits from 'inherits-browser';
 
 import { assign, isObject } from 'min-dash';
 
+import { attr as domAttr, query as domQuery } from 'min-dom';
+
 import {
   append as svgAppend,
   attr as svgAttr,
@@ -10,6 +12,8 @@ import {
 } from 'tiny-svg';
 
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
+
+import { createLine } from 'diagram-js/lib/util/RenderUtil';
 
 const BLACK = 'hsl(225, 10%, 15%)';
 const DEFAULT_FILL_OPACITY = 0.95;
@@ -20,6 +24,11 @@ const DEFAULT_FONT_WEIGHT = 'normal';
 
 function getSemantic(element) {
   return element.businessObject;
+}
+
+function colorEscape(str) {
+  // only allow characters and numbers
+  return str.replace(/[^0-9a-zA-z]+/g, '_');
 }
 
 function getStrokeColor(element, defaultColor) {
@@ -35,8 +44,125 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   const { computeStyle } = styles;
 
+  const markers = {};
+
   const defaultFillColor = (config && config.defaultFillColor) || 'white';
   const defaultStrokeColor = (config && config.defaultStrokeColor) || BLACK;
+
+  function shapeStyle(attrs) {
+    return styles.computeStyle(attrs, {
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      stroke: BLACK,
+      strokeWidth: 2,
+      fill: 'white',
+    });
+  }
+
+  function addMarker(id, options) {
+    const attrs = assign({
+      strokeWidth: 1,
+      strokeLinecap: 'round',
+      strokeDasharray: 'none',
+    }, options.attrs);
+
+    const ref = options.ref || { x: 0, y: 0 };
+
+    const scale = options.scale || 1;
+
+    // fix for safari / chrome / firefox bug not correctly
+    // resetting stroke dash array
+    if (attrs.strokeDasharray === 'none') {
+      attrs.strokeDasharray = [10000, 1];
+    }
+
+    const markerElement = svgCreate('marker');
+
+    svgAttr(options.element, attrs);
+
+    svgAppend(markerElement, options.element);
+
+    svgAttr(markerElement, {
+      id,
+      viewBox: '0 0 20 20',
+      refX: ref.x,
+      refY: ref.y,
+      markerWidth: 20 * scale,
+      markerHeight: 20 * scale,
+      orient: 'auto',
+    });
+
+    // eslint-disable-next-line no-underscore-dangle
+    let defs = domQuery('defs', canvas._svg);
+
+    if (!defs) {
+      defs = svgCreate('defs');
+
+      // eslint-disable-next-line no-underscore-dangle
+      svgAppend(canvas._svg, defs);
+    }
+
+    svgAppend(defs, markerElement);
+
+    markers[id] = markerElement;
+  }
+
+  function createMarker(id, type, fill, stroke) {
+    const end = svgCreate('path');
+    svgAttr(end, { d: 'M 1 5 L 11 10 L 1 15 Z' });
+
+    if (type === 'connection-end') {
+      addMarker(id, {
+        element: end,
+        attrs: {
+          fill: stroke,
+          stroke: 'none',
+        },
+        ref: { x: 11, y: 10 },
+        scale: 1,
+      });
+    }
+
+    if (type === 'default-choice-marker') {
+      const defaultChoiceMarker = svgCreate('path', {
+        d: 'M 6 4 L 10 16',
+        ...shapeStyle({
+          stroke,
+        }),
+      });
+
+      addMarker(id, {
+        element: defaultChoiceMarker,
+        ref: { x: 0, y: 10 },
+        scale: 1,
+      });
+    }
+  }
+
+  function marker(type, fill, stroke) {
+    const id = `${type}-${colorEscape(fill)
+    }-${colorEscape(stroke)}`;
+
+    if (!markers[id]) {
+      createMarker(id, type, fill, stroke);
+    }
+
+    return `url(#${id})`;
+  }  
+
+  function drawLine(p, waypoints, attrs) {
+    attrs = computeStyle(attrs, ['no-fill'], {
+      stroke: BLACK,
+      strokeWidth: 2,
+      fill: 'none',
+    });
+
+    const line = createLine(waypoints, attrs);
+
+    svgAppend(p, line);
+
+    return line;
+  }  
 
   function drawRect(parentGfx, width, height, r, offset, attrs) {
     if (isObject(offset)) {
@@ -122,6 +248,19 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
   }
 
   handlers = {
+    Connection(p, element) {
+      const fill = getFillColor(element, defaultFillColor);
+      const stroke = getStrokeColor(element, defaultStrokeColor);
+      const attrs = {
+        stroke,
+        strokeWidth: 1,
+        strokeLinecap: 'round',
+        strokeLinejoin: 'round',
+        markerEnd: marker('connection-end', fill, stroke),
+      };
+
+      return drawLine(p, element.waypoints, attrs);
+    },    
     Event(parentGfx, element) {
       var attrs = {
         fill: getFillColor(element, defaultFillColor),
@@ -312,7 +451,7 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
   // eslint-disable-next-line no-unused-vars
   this.canRender = function (element) {
-    return [ 'Event', 'Screen', 'Command', 'ReadModel', 'Processor'].includes(element.type);
+    return [ 'Event', 'Screen', 'Command', 'ReadModel', 'Processor', 'Connection'].includes(element.type);
   };
 
   this.drawShape = drawShape;

@@ -8,6 +8,7 @@ import Screen from '../spec/Screen';
 import Command from '../spec/Command';
 import ReadModel from '../spec/ReadModel';
 import Processor from '../spec/Processor';
+import Connection from '../spec/Connection';
 
 export default function EMFactory() {
   const typeToSpec = new Map();
@@ -21,6 +22,7 @@ export default function EMFactory() {
   typeToSpec.set('Command', Command);
   typeToSpec.set('ReadModel', ReadModel);
   typeToSpec.set('Processor', Processor);
+  typeToSpec.set('Connection', Connection);
   this.typeToSpec = typeToSpec;
 }
 
