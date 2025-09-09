@@ -8,10 +8,11 @@ import Modeling from './Modeling';
 import EMFactory from './EMFactory';
 import EMRules from './EMRules';
 import DiagramModelingModule from 'diagram-js/lib/features/modeling';
+import AutoResizeFields from './AutoResizeFields';
 import EMImporter from './EMImporter';
 
 export default {
-  __init__: ['modeling', 'EMFactory', 'EMRules'],
+  __init__: ['modeling', 'EMFactory', 'EMRules', 'autoResizeFields'],
   __depends__: [
     DiagramCommand,
     DiagramChangeSupport,
@@ -24,4 +25,5 @@ export default {
   modeling: ['type', Modeling],
   EMFactory: ['type', EMFactory],
   EMRules: ['type', EMRules],
+  autoResizeFields: ['type', AutoResizeFields],
 };
