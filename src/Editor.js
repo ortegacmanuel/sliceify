@@ -28,6 +28,7 @@ import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 
 import GridModule from 'diagram-js-grid';
 
+import Layout from './layout';
 import Providers from './providers';
 import Render from './render';
 import Modeling from './modeling';
@@ -60,6 +61,7 @@ Editor.prototype.modules = [
   Render,
   Modeling,
   TimelineModule,
+  Layout,
 
   // Built-in modules
   AlignElementsModule,

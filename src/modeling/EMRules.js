@@ -12,12 +12,26 @@ inherits(EMRules, RuleProvider);
 
 EMRules.$inject = ['injector'];
 
+function findTimeline(el) {
+  let cur = el;
+  while (cur) {
+    if (cur.type === 'Timeline') return cur;
+    cur = cur.parent;
+  }
+  return null;
+}
+
 function canConnect(source, target) {
   if (!source || !target) {
     return null;
   }
 
-  if (target.parent !== source.parent || source === target) {
+  if (source === target) {
+    return false;
+  }
+  const stl = findTimeline(source);
+  const ttl = findTimeline(target);
+  if (stl && ttl && stl !== ttl) {
     return false;
   }
 
