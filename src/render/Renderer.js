@@ -213,6 +213,40 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
     return text;
   }
 
+  function renderFieldsList(parentGfx, element, options) {
+    const bo = getSemantic(element) || {};
+    const fields = Array.isArray(bo.fields) ? bo.fields : [];
+    if (!fields.length) return null;
+
+    const {
+      x = 6,
+      y = 6,
+      width = Math.max(0, element.width - 12),
+      lineHeight = 14,
+      fontSize = 12,
+      maxLines = 6,
+    } = options || {};
+
+    const lines = fields.slice(0, maxLines).map((f, i) => {
+      const name = f && f.name ? String(f.name) : `field ${i + 1}`;
+      const example = f && f.example ? String(f.example) : `example ${i + 1}`;
+      return `${name}: ${example}`;
+    });
+
+    // draw one text element with explicit <tspan> lines to avoid overlaying and reflow
+    const text = svgCreate('text');
+    svgAttr(text, { x, y, 'font-size': fontSize, fill: 'black' });
+    lines.forEach((line, i) => {
+      const tspan = svgCreate('tspan');
+      svgAttr(tspan, { x, dy: i === 0 ? 0 : lineHeight });
+      tspan.textContent = line;
+      svgAppend(text, tspan);
+    });
+    svgAppend(parentGfx, text);
+
+    return true;
+  }
+
   function renderEmbeddedLabel(parentGfx, element, options) {
     var semantic = getSemantic(element);
 
@@ -274,6 +308,8 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
       var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
 
       renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
+
+      renderFieldsList(parentGfx, element, { x: 8, y: 44, width: Math.max(0, element.width - 16), lineHeight: 16, fontSize: 12, maxLines: 6 });
 
       return rect;
     },
@@ -351,6 +387,8 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
 
       renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
 
+      renderFieldsList(parentGfx, element, { x: 8, y: 44, width: Math.max(0, element.width - 16), lineHeight: 16, fontSize: 12, maxLines: 6 });
+
       return rect;
     },
     ReadModel(parentGfx, element) {
@@ -366,6 +404,8 @@ export default function Renderer(config, eventBus, pathMap, styles, textRenderer
       var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
 
       renderEmbeddedLabel(parentGfx, element, { align: 'left-top', fontWeight: 'bold' });
+
+      renderFieldsList(parentGfx, element, { x: 8, y: 44, width: Math.max(0, element.width - 16), lineHeight: 16, fontSize: 12, maxLines: 6 });
 
       return rect;
     },

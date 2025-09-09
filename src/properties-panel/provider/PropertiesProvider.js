@@ -5,12 +5,14 @@ import CommentProps from './properties/CommentProps';
 import VersionProps from './properties/VersionProps';
 import StateProps from './properties/StateProps';
 import StyleProps from './properties/StyleProps';
+import FieldsProps from './properties/FieldsProps';
 import { is } from '../../utils';
 
 function GeneralGroup(element) {
   const entries = [
     ...NameProps({ element }),
     ...CommentProps({ element }),
+    ...FieldsProps({ element }),
   ];
 
   if (is(element, 'StateMachine')) {
